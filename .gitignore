@@ -1,0 +1,21 @@
+# Dependencies
+client/node_modules/
+server/node_modules/
+
+# Environment variables
+server/.env
+
+# SQLite database
+server/dev.db
+
+# Build output
+client/dist/
+
+# Logs
+*.log
+
+# macOS
+.DS_Store
+
+# VS Code (optional)
+.vscode/
