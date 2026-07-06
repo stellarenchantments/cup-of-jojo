@@ -6,14 +6,15 @@ import GasStationScene from "./scenes/GasStationScene";
 import GroceryStoreScene from "./scenes/GroceryStoreScene";
 import HomeScene from "./scenes/HomeScene";
 import MarketScene from "./scenes/MarketScene";
+import GameOverScene from "./scenes/GameOverScene";
 
 const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
   parent: "app",
   width: 900,
-  height: 600,
+  height: 650,
   backgroundColor: "#0bac41",
-  scene: [MapScene, TruckScene, GasStationScene, GroceryStoreScene, HomeScene, MarketScene],
+  scene: [MapScene, TruckScene, GasStationScene, GroceryStoreScene, HomeScene, MarketScene, GameOverScene],
 };
 
 new Phaser.Game(config);

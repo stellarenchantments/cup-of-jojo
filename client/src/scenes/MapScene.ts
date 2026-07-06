@@ -1,88 +1,70 @@
 import Phaser from "phaser";
+import { Location } from "../enums/Location";
+import { GameState } from "../state/GameState";
+import { addLocationButton } from "../components/LocationButton";
 
 export default class MapScene extends Phaser.Scene {
     constructor() {
         super("MapScene");
     }
 
-    preload() {
-        // Load assets here later
-    }
-
     create() {
+        const locationPositions = {
+            [Location.HOME]: { x: 100, y: 250 },
+            [Location.GAS]: { x: 450, y: 100 },
+            [Location.GROCERY]: { x: 450, y: 500 },
+            [Location.MARKET]: { x: 800, y: 250 },
+        };
+
+        const truckPosition = locationPositions[GameState.truckLocation];
+
         this.cameras.main.setBackgroundColor("#ffffff");
 
-        this.add.text(450, 300, "Cup of Jojos", {
+        this.add.text(450, 300, "Cup of JoJo", {
             fontSize: "40px",
-            color: "#000000",
+            color: "#8a0e95",
         }).setOrigin(0.5);
 
-        const gasStationButton = this.add.text(450, 50, "⛽ Gas Station", {
-            fontSize: "32px",
+        const truckInfoText = this.add.text(truckPosition.x, truckPosition.y - 45, "", {
+            fontSize: "18px",
             color: "#000000",
             backgroundColor: "#eeeeee",
-            padding: {
-                x: 16,
-                y: 8,
-            },    
+            padding: { x: 8, y: 4 },
+        })
+            .setOrigin(0.5)
+            .setVisible(false);
+
+        const travelInfoText = this.add.text(0, 0, "", {
+            fontSize: "18px",
+            color: "#000000",
+            backgroundColor: "#eeeeee",
+            padding: { x: 8, y: 4 },
+        })
+            .setOrigin(0.5)
+            .setVisible(false);
+
+        addLocationButton(this, Location.GAS, 450, 50, "GasStationScene", travelInfoText);
+        addLocationButton(this, Location.GROCERY, 450, 550, "GroceryStoreScene", travelInfoText);
+        addLocationButton(this, Location.HOME, 100, 300, "HomeScene", travelInfoText);
+        addLocationButton(this, Location.MARKET, 800, 300, "MarketScene", travelInfoText);
+
+        const truck = this.add.text(truckPosition.x, truckPosition.y, "🚚", {
+            fontSize: "40px",
         })
             .setOrigin(0.5)
             .setInteractive({ useHandCursor: true });
 
-            gasStationButton.on("pointerdown", () => {
-                this.scene.start("GasStationScene");    
-            });
+        truck.on("pointerover", () => {
+            truckInfoText.setText(`Gas: ${GameState.gallonsOfGas} gal`);
+            truckInfoText.setVisible(true);
+        });
 
-        const groceryStoreButton = this.add.text(450, 550, "🛒 Grocery Store", {
-                fontSize: "32px",
-                color: "#000000",
-                backgroundColor: "#eeeeee",
-                padding: {
-                    x: 16,
-                    y: 8,
-                },    
-        })
-            .setOrigin(0.5)
-            .setInteractive({ useHandCursor: true });
-        
-            groceryStoreButton.on("pointerdown", () => {
-                this.scene.start("GroceryStoreScene");
-            });
+        truck.on("pointerout", () => {
+            truckInfoText.setVisible(false);
+        });
 
-        const homeButton = this.add.text(100, 300, "🏠 Home", {
-                fontSize: "32px",
-                color: "#000000",
-                backgroundColor: "#eeeeee",
-                padding: {
-                    x: 16,
-                    y: 8,
-                },    
-        })
-            .setOrigin(0.5)
-            .setInteractive({ useHandCursor: true });
-        
-            homeButton.on("pointerdown", () => {
-                this.scene.start("HomeScene");
-            });
-
-        const marketButton = this.add.text(800, 300, "☕ Market", {
-            fontSize: "32px",
-                color: "#000000",
-                backgroundColor: "#eeeeee",
-                padding: {
-                    x: 16,
-                    y: 8,
-                },
-        })
-            .setOrigin(0.5)
-            .setInteractive({ useHandCursor: true});
-
-            marketButton.on("pointerdown", () => {
-                this.scene.start("MarketScene")
-            });
-    }
-
-    update() {
-        // Update logic later
+        truck.setDepth(10);
+        truckInfoText.setDepth(11);
+        travelInfoText.setDepth(11);
     }
 }

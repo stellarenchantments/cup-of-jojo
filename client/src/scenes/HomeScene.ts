@@ -1,4 +1,6 @@
 import Phaser from "phaser";
+import { Location, LocationDisplayName } from "../enums/Location";
+import { addBackToMapButton } from "../components/BackToMapButton";
 
 export default class HomeScene extends Phaser.Scene {
   constructor() {
@@ -8,7 +10,7 @@ export default class HomeScene extends Phaser.Scene {
   create() {
     this.cameras.main.setBackgroundColor("#ffffff");
 
-    this.add.text(450, 850, "🏠 Home", {
+    this.add.text(450, 850, LocationDisplayName[Location.HOME], {
       fontSize: "32px",
       color: "#000000",
     }).setOrigin(0.5);
@@ -18,17 +20,6 @@ export default class HomeScene extends Phaser.Scene {
       color: "#000000",
     }).setOrigin(0.5);
 
-    const backButton = this.add.text(450, 500, "⬅ Back to Map", {
-      fontSize: "28px",
-      color: "#000000",
-      backgroundColor: "#eeeeee",
-      padding: { x: 16, y: 8 },
-    })
-    .setOrigin(0.5)
-    .setInteractive({ useHandCursor: true });
-
-    backButton.on("pointerdown", () => {
-      this.scene.start("MapScene");
-    });
+    addBackToMapButton(this, 450, 500);
   }
 }
