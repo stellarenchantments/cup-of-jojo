@@ -1,4 +1,4 @@
-import { Location } from "../enums/Location";
+import { Location } from "../models/Location";
 
 const GasCosts: Record<Location, Partial<Record<Location, number>>> = {
   [Location.HOME]: {

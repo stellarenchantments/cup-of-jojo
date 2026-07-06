@@ -1,4 +1,4 @@
-import { Location } from "../enums/Location";
+import { Location } from "../models/Location";
 
 export const GameState = {
     truckLocation: Location.HOME,

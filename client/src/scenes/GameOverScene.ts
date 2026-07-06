@@ -1,5 +1,6 @@
 import Phaser from "phaser";
 import { resetGameState } from "../state/GameState";
+import { resetInventory } from "../services/InventoryService";
 
 export default class GameOverScene extends Phaser.Scene {
     constructor() {
@@ -19,9 +20,14 @@ export default class GameOverScene extends Phaser.Scene {
             .setOrigin(0.5)
             .setInteractive({ useHandCursor: true });
 
-        resetButton.on("pointerdown", () => {
-            resetGameState();
-            this.scene.start("MapScene");
-        })
+        resetButton.on("pointerdown", async () => {
+            try {
+                await resetInventory();
+                resetGameState();
+                this.scene.start("MapScene");
+            } catch (error) {
+                console.error(error);
+            }
+        });
     }
 }

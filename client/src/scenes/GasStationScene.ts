@@ -1,9 +1,9 @@
 import Phaser from "phaser";
-import { Location, LocationDisplayName } from "../enums/Location";
+import { Location, LocationDisplayName } from "../models/Location";
 import { GameState } from "../state/GameState";
 import { addBackToMapButton } from "../components/BackToMapButton";
 import { addGameHud } from "../components/GameHud";
-
+import { showFloatingText } from "../components/FloatingText";
 
 export default class GasStationScene extends Phaser.Scene {
     private gasText!: Phaser.GameObjects.Text;
@@ -119,7 +119,13 @@ export default class GasStationScene extends Phaser.Scene {
             const circleY = this.activeCircle.y;
 
             GameState.money -= this.gasCostPerGallon;
-            this.showMoneyLoss(circleX, circleY);
+            showFloatingText(
+                this,
+                circleX,
+                circleY,
+                `+1 ⛽ -$${this.gasCostPerGallon}`,
+                "#161cc2"
+            );
             this.hud.refresh();
 
             GameState.gallonsOfGas = Math.min(
@@ -169,22 +175,4 @@ export default class GasStationScene extends Phaser.Scene {
         this.messageText.setText(message);
     }
 
-    private showMoneyLoss(x: number, y: number) {
-    const lossText = this.add.text(x, y, `-$${this.gasCostPerGallon}`, {
-        fontSize: "24px",
-        color: "#cc0000",
-        backgroundColor: "#ffffff",
-        padding: { x: 6, y: 4 },
-    }).setOrigin(0.5);
-
-    this.tweens.add({
-        targets: lossText,
-        y: y - 40,
-        alpha: 0,
-        duration: 700,
-        onComplete: () => {
-            lossText.destroy();
-        },
-    });
-    }
 }

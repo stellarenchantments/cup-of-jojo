@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import { Location, LocationDisplayName } from "../enums/Location";
+import { Location, LocationDisplayName } from "../models/Location";
 import { addBackToMapButton } from "../components/BackToMapButton";
 
 export default class MarketScene extends Phaser.Scene {
