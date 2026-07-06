@@ -2,6 +2,7 @@ import Phaser from "phaser";
 import { Location } from "../enums/Location";
 import { GameState } from "../state/GameState";
 import { addLocationButton } from "../components/LocationButton";
+import { addGameHud } from "../components/GameHud";
 
 export default class MapScene extends Phaser.Scene {
     constructor() {
@@ -19,6 +20,7 @@ export default class MapScene extends Phaser.Scene {
         const truckPosition = locationPositions[GameState.truckLocation];
 
         this.cameras.main.setBackgroundColor("#ffffff");
+        addGameHud(this);
 
         this.add.text(450, 300, "Cup of JoJo", {
             fontSize: "40px",
