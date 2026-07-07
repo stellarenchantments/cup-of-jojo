@@ -14,7 +14,7 @@ export default class GasStationScene extends Phaser.Scene {
     private wrongTargets: Phaser.GameObjects.Arc[] = [];
     private timerEvent: Phaser.Time.TimerEvent | null = null;
 
-    private chancesRemaining = 16;
+    private chancesRemaining = 20;
     private readonly maxGas = GameState.maxGallonsOfGas;
     private readonly roundSeconds = 1.5;
     private readonly gasCostPerGallon = 10;
@@ -28,6 +28,7 @@ export default class GasStationScene extends Phaser.Scene {
     create() {
         this.cameras.main.setBackgroundColor("#ffffff");
         this.hud = addGameHud(this);
+        this.resetMiniGame();
 
         this.add.text(450, 80, LocationDisplayName[Location.GAS], {
             fontSize: "32px",
@@ -45,7 +46,7 @@ export default class GasStationScene extends Phaser.Scene {
 
     startButton.on("pointerdown", () => {
         startButton.destroy();
-        this.messageText.setText("Click the green target!");
+        this.messageText.setText("Click the right vehicle 🚚!");
         this.startRound();
     });
 
@@ -59,7 +60,7 @@ export default class GasStationScene extends Phaser.Scene {
             color: "#000000",
         }).setOrigin(0.5);
 
-        this.messageText = this.add.text(450, 245, "Click the moving gas target!", {
+        this.messageText = this.add.text(450, 245, "Click the correct moving target!", {
             fontSize: "24px",
             color: "#000000",
         }).setOrigin(0.5);
@@ -85,24 +86,34 @@ export default class GasStationScene extends Phaser.Scene {
         const x = Phaser.Math.Between(100, 800);
         const y = Phaser.Math.Between(300, 450);
 
-        this.activeCircle = this.add.circle(x, y, 30, 0x00aa00)
+        const activeTruck = this.add.text(x, y, "🚚", {
+            fontSize: "48px",
+        })
+            .setOrigin(0.5)
             .setInteractive({ useHandCursor: true });
 
+        this.activeCircle = activeTruck as unknown as Phaser.GameObjects.Arc;
+
         for (let i = 0; i < 3; i++) {
-          const badX = Phaser.Math.Between(100, 800);
-          const badY = Phaser.Math.Between(300, 450);
+            const badX = Phaser.Math.Between(100, 800);
+            const badY = Phaser.Math.Between(300, 450);
 
-          const badCircle = this.add.circle(badX, badY, 25, 0xff9900)
-              .setInteractive({ useHandCursor: true });
+            const badTruck = this.add.text(badX, badY, "🚛", {
+                fontSize: "48px",
+            }) 
+                .setOrigin(0.5)
+                .setInteractive({ useHandCursor: true });
 
-          badCircle.on("pointerdown", () => {
-              this.chancesRemaining -= 1;
-              this.messageText.setText("Oops! Wrong truck!");
-              this.updateHud();
-              this.startRound();
-          });
+            const badCircle = badTruck as unknown as Phaser.GameObjects.Arc;
 
-          this.wrongTargets.push(badCircle);
+            badCircle.on("pointerdown", () => {
+                this.chancesRemaining -= 1;
+                this.messageText.setText("Oops! Wrong truck!");
+                this.updateHud();
+                this.startRound();
+            });
+
+            this.wrongTargets.push(badCircle);
         }
 
         this.activeCircle.on("pointerdown", () => {
@@ -123,7 +134,7 @@ export default class GasStationScene extends Phaser.Scene {
                 this,
                 circleX,
                 circleY,
-                `+1 ⛽ -$${this.gasCostPerGallon}`,
+                `+1 Gas ⛽ -$${this.gasCostPerGallon}`,
                 "#161cc2"
             );
             this.hud.refresh();
@@ -174,5 +185,8 @@ export default class GasStationScene extends Phaser.Scene {
         this.clearRound();
         this.messageText.setText(message);
     }
-
+    private resetMiniGame() {
+        this.chancesRemaining = 20;
+        this.clearRound();
+    }
 }

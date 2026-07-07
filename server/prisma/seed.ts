@@ -3,7 +3,6 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 async function main() {
-    console.log("Creating ingredients...");
 
     await prisma.ingredient.createMany({
         data: [
@@ -12,13 +11,10 @@ async function main() {
             { name: "Cacao Powder", sizeOz: 8, groceryCost: 4, perishableDays: 30 },
             { name: "Whole Milk", sizeOz: 128, groceryCost: 4, perishableDays: 2 },
             { name: "Oat Milk", sizeOz: 128, groceryCost: 6, perishableDays: 4 },
-            { name: "Whipped Cream", sizeOz: 8, groceryCost: 3, perishableDays: 7 },
-            { name: "Chocolate Syrup", sizeOz: 8, groceryCost: 5, perishableDays: 2 },
+            { name: "Sugar", sizeOz: 8, groceryCost: 3, perishableDays: null },
+            { name: "Chocolate", sizeOz: 8, groceryCost: 5, perishableDays: 2 },
         ],
     });
-
-    console.log("ingredients created.");
-    console.log("Creating cup...");
 
     await prisma.cup.create({
         data: {
@@ -28,36 +24,77 @@ async function main() {
         }
     });
 
-    console.log("Cup created.");
+    const ingredients = {
+        coffeeBeans: await prisma.ingredient.findUniqueOrThrow({ where: { name: "Coffee Beans" } }),
+        water: await prisma.ingredient.findUniqueOrThrow({ where: { name: "Water" } }),
+        cacaoPowder: await prisma.ingredient.findUniqueOrThrow({ where: { name: "Cacao Powder" } }),
+        wholeMilk: await prisma.ingredient.findUniqueOrThrow({ where: { name: "Whole Milk" } }),
+        oatMilk: await prisma.ingredient.findUniqueOrThrow({ where: { name: "Oat Milk" } }),
+        sugar: await prisma.ingredient.findUniqueOrThrow({ where: { name: "Sugar" } }),
+        chocolate: await prisma.ingredient.findUniqueOrThrow({ where: { name: "Chocolate" } }),
+    };
 
-    const phantomBlood = await prisma.recipe.create({
-        data: {
-            name: "Phantom Blood",
-            dayUnlocked: 0,
-        },
-        });
-
-        const coffeeBeans = await prisma.ingredient.findUniqueOrThrow({
-            where: { name: "Coffee Beans" },
-        });
-
-        const water = await prisma.ingredient.findUniqueOrThrow({
-            where: { name: "Water" },
+    async function createRecipe(
+        name: string,
+        dayUnlocked: number,
+        recipeIngredients: { ingredientId: string; amountOz: number }[]
+    ) {
+        const recipe = await prisma.recipe.create({
+            data: {
+                name,
+                dayUnlocked,
+            },
         });
 
         await prisma.recipeIngredient.createMany({
+            data: recipeIngredients.map((ingredient) => ({
+                recipeId: recipe.id,
+                ingredientId: ingredient.ingredientId,
+                amountOz: ingredient.amountOz,
+            })),
+        });
+    }
+
+    await createRecipe("Phantom Blood", 1, [
+        { ingredientId: ingredients.coffeeBeans.id, amountOz: 2 },
+        { ingredientId: ingredients.water.id, amountOz: 8 },
+    ]);
+
+    await createRecipe("Battle Tendency", 2, [
+        { ingredientId: ingredients.coffeeBeans.id, amountOz: 2 },
+        { ingredientId: ingredients.water.id, amountOz: 6 },
+        { ingredientId: ingredients.wholeMilk.id, amountOz: 2 },
+    ]);
+
+    await createRecipe("Stardust Crusader", 3, [
+        { ingredientId: ingredients.coffeeBeans.id, amountOz: 2 },
+        { ingredientId: ingredients.water.id, amountOz: 6 },
+        { ingredientId: ingredients.oatMilk.id, amountOz: 2 },
+    ]);
+
+    await createRecipe("Diamond is Unbreakable", 4, [
+        { ingredientId: ingredients.cacaoPowder.id, amountOz: 2 },
+        { ingredientId: ingredients.wholeMilk.id, amountOz: 8 },
+    ]);
+
+    await createRecipe("Golden Wind", 5, [
+        { ingredientId: ingredients.coffeeBeans.id, amountOz: 2 },
+        { ingredientId: ingredients.chocolate.id, amountOz: 1 },
+        { ingredientId: ingredients.oatMilk.id, amountOz: 7 },
+    ]);
+
+    await createRecipe("Stone Ocean", 6, [
+        { ingredientId: ingredients.coffeeBeans.id, amountOz: 2 },
+        { ingredientId: ingredients.chocolate.id, amountOz: 1 },
+        { ingredientId: ingredients.wholeMilk.id, amountOz: 6 },
+        { ingredientId: ingredients.sugar.id, amountOz: 1 },
+    ]);
+
+    await prisma.marketSpot.createMany({
         data: [
-            {
-                recipeId: phantomBlood.id,
-                ingredientId: coffeeBeans.id,
-                amountOz: 2,
-            },
-            {
-                recipeId: phantomBlood.id,
-                ingredientId: water.id,
-                amountOz: 8,
-            },
-        ],    
+            { name: "Spot 1", rentalCost: 30 },
+            { name: "Spot 2", rentalCost: 30 },
+        ],
     });
 }
 

@@ -8,56 +8,63 @@ datasource db {
 }
 
 model Ingredient {
-  id             String                @id @default(uuid())
-  name           String                @unique
+  id             String @id @default(uuid())
+  name           String @unique
   sizeOz         Float
   groceryCost    Float
   perishableDays Int?
 
-  inventoryItems InventoryIngredient[]
+  inventoryItems    InventoryIngredient[]
   recipeIngredients RecipeIngredient[]
 }
 
 model InventoryIngredient {
-  id           String     @id @default(uuid())
+  id           String @id @default(uuid())
   ingredientId String
-  quantity     Int        @default(1)
-  daysOld      Int        @default(0)
+  quantity     Int    @default(1)
+  remainingOz  Float
+  daysOld      Int    @default(0)
 
-  ingredient   Ingredient @relation(fields: [ingredientId], references: [id])
+  ingredient Ingredient @relation(fields: [ingredientId], references: [id])
 }
 
 model Cup {
-  id             String                @id @default(uuid())
-  name           String                @unique
-  sizeOz         Float
-  groceryCost    Float
+  id          String @id @default(uuid())
+  name        String @unique
+  sizeOz      Float
+  groceryCost Float
 
   inventoryItems InventoryCup[]
 }
 
 model InventoryCup {
-  id           String     @id @default(uuid())
-  cupId String
-  quantity     Int        @default(1)
+  id       String @id @default(uuid())
+  cupId    String
+  quantity Int    @default(1)
 
-  cup   Cup @relation(fields: [cupId], references: [id])
+  cup Cup @relation(fields: [cupId], references: [id])
 }
 
 model Recipe {
-  id           String     @id @default(uuid())
-  name           String                @unique
+  id          String             @id @default(uuid())
+  name        String             @unique
   dayUnlocked Int
-
+  price       Float              @default(0)
   ingredients RecipeIngredient[]
 }
 
 model RecipeIngredient {
-  id           String     @id @default(uuid())
-  recipeId String
+  id           String @id @default(uuid())
+  recipeId     String
   ingredientId String
-  amountOz         Float
+  amountOz     Float
 
-  recipe Recipe @relation(fields: [recipeId], references: [id])
+  recipe     Recipe     @relation(fields: [recipeId], references: [id])
   ingredient Ingredient @relation(fields: [ingredientId], references: [id])
+}
+
+model MarketSpot {
+  id         String @id @default(uuid())
+  name       String @unique
+  rentalCost Float
 }

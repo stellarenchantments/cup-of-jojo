@@ -28,7 +28,7 @@ export default class MapScene extends Phaser.Scene {
         }).setOrigin(0.5);
 
         const truckInfoText = this.add.text(truckPosition.x, truckPosition.y - 45, "", {
-            fontSize: "18px",
+            fontSize: "26px",
             color: "#000000",
             backgroundColor: "#eeeeee",
             padding: { x: 8, y: 4 },
@@ -37,7 +37,7 @@ export default class MapScene extends Phaser.Scene {
             .setVisible(false);
 
         const travelInfoText = this.add.text(0, 0, "", {
-            fontSize: "18px",
+            fontSize: "20px",
             color: "#000000",
             backgroundColor: "#eeeeee",
             padding: { x: 8, y: 4 },

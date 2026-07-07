@@ -14,11 +14,12 @@ export function addGameHud(scene: Phaser.Scene) {
 
     const refresh = () => {
         hudText.setText(
-            `Day: ${GameState.day}\nTime: ${GameState.time}\nCash: $${GameState.money}`
+            `Day: ${GameState.day}\nCash: $${GameState.money}\nGas: ${GameState.gallonsOfGas}`
         );
     };
 
     refresh();
+    scene.events.on("game-state-updated", refresh);
 
     return {
         text: hudText,

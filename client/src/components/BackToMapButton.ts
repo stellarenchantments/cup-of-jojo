@@ -3,7 +3,7 @@ import { GameState } from "../state/GameState";
 
 export function addBackToMapButton(scene: Phaser.Scene, x: number, y: number) {
   const button = scene.add.text(x, y, "⬅ Back to Map", {
-    fontSize: "28px",
+    fontSize: "18px",
     color: "#000000",
     backgroundColor: "#eeeeee",
     padding: { x: 16, y: 8 },

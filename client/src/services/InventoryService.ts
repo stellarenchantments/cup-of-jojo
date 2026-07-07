@@ -1,23 +1,4 @@
-import type { Ingredient } from "../models/Ingredient";
-import type { Cup } from "../models/Cup";
-
-export interface InventoryIngredient {
-    id: string;
-    quantity: number;
-    daysOld: number;
-    ingredient: Ingredient;
-}
-
-export interface InventoryCup {
-    id: string;
-    quantity: number;
-    cup: Cup;
-}
-
-export interface Inventory {
-    ingredients: InventoryIngredient[];
-    cups: InventoryCup[];
-}
+import type { Inventory} from "../models/InventoryItems";
 
 export async function getInventory(): Promise<Inventory> {
     const response = await fetch("http://localhost:3000/api/inventory");
@@ -89,6 +70,57 @@ export async function resetInventory() {
 
     if (!response.ok) {
         throw new Error("Failed to reset inventory.");
+    }
+
+    return response.json();
+}
+
+export async function consumeIngredient(
+    inventoryIngredientId: string,
+    amountOz = 1
+) {
+    const response = await fetch(
+        `http://localhost:3000/api/inventory/ingredients/${inventoryIngredientId}/consume`,
+        {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ amountOz }),
+        }
+    );
+
+    if (!response.ok) {
+        throw new Error("Failed to consume ingredient.");
+    }
+
+    return response.json();
+}
+
+export async function consumeCup(
+    inventoryCupId: string
+) {
+    const response = await fetch(
+        `http://localhost:3000/api/inventory/cups/${inventoryCupId}/consume`,
+        {
+            method: "PATCH",
+        }
+    );
+
+    if (!response.ok) {
+        throw new Error("Failed to consume cup.");
+    }
+
+    return response.json();
+}
+
+export async function ageInventoryOneDay() {
+    const response = await fetch("http://localhost:3000/api/inventory/age", {
+        method: "PATCH",
+    });
+
+    if (!response.ok) {
+        throw new Error("Failed to age inventory.");
     }
 
     return response.json();

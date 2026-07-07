@@ -11,8 +11,8 @@ import GameOverScene from "./scenes/GameOverScene";
 const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
   parent: "app",
-  width: 900,
-  height: 650,
+  width: 1000,
+  height: 700,
   backgroundColor: "#0bac41",
   scene: [MapScene, TruckScene, GasStationScene, GroceryStoreScene, HomeScene, MarketScene, GameOverScene],
 };
