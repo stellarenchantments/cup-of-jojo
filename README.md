@@ -6,14 +6,14 @@
 
 ## Run the server
 
-cd server
-npm install
-npx prisma migrate dev
-npx prisma db seed
-npm run dev
+1. cd server
+2. npm install
+3. npx prisma migrate dev
+4. npx prisma db seed
+5. npm run dev
 
 ## Run the client
 
-cd client
-npm install
-npm run dev
+1. cd client
+2. npm install
+3. npm run dev
