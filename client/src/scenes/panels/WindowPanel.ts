@@ -9,6 +9,7 @@ import {
 } from "../../services/MarketService";
 import type { Recipe } from "../../models/Recipe";
 import { getActiveOrder, setActiveOrder, clearActiveOrder } from "../../state/OrderState";
+import { showFloatingText } from "../../components/FloatingText";
 
 export class WindowPanel extends TruckPanel {
     readonly name = "Window";
@@ -18,6 +19,7 @@ export class WindowPanel extends TruckPanel {
     private recipes: Recipe[] = [];
     private customerText!: Phaser.GameObjects.Text;
     private orderText!: Phaser.GameObjects.Text;
+    private serveButton!: Phaser.GameObjects.Text;
     
     render(
         scene: Phaser.Scene,
@@ -212,12 +214,9 @@ export class WindowPanel extends TruckPanel {
         this.orderText = scene.add.text(
             650,
             280,
-            activeOrder
-                ? `Order: ${activeOrder.recipe.name}${
-                    activeOrder.isPrepared
-                        ? "\nReady to serve!"
-                        : "\nPreparing..."
-                }`
+            activeOrder ? `Order: ${activeOrder.recipe.name}
+                Budget: $${activeOrder.budget}
+                ${activeOrder.isPrepared ? "\nReady to serve!" : "\nPreparing..."}`
                 : "Click New Customer",
             {
                 fontSize: "20px",
@@ -236,10 +235,10 @@ export class WindowPanel extends TruckPanel {
             .setOrigin(0.5)
             .setInteractive({ useHandCursor: true });
 
-        const serveButton = scene.add.text(650, 415, "Serve", {
+        this.serveButton = scene.add.text(650, 415, "Serve", {
             fontSize: "22px",
-            color: "#000000",
-            backgroundColor: "#eeeeee",
+            color: "#999999",
+            backgroundColor: "#dddddd",
             padding: { x: 12, y: 8 },
         })
             .setOrigin(0.5)
@@ -249,14 +248,26 @@ export class WindowPanel extends TruckPanel {
             this.spawnCustomer();
         });
 
-        serveButton.on("pointerdown", () => {
+        this.updateServeButton();
+
+        this.serveButton.on("pointerdown", () => {
             this.serveOrder();
         });
 
         addActiveObject(this.customerText);
         addActiveObject(this.orderText);
         addActiveObject(newCustomerButton);
-        addActiveObject(serveButton);
+        addActiveObject(this.serveButton);
+
+        scene.time.addEvent({
+        delay: 15000,
+        loop: true,
+        callback: () => {
+            if (!getActiveOrder()) {
+                this.spawnCustomer();
+            }
+        },
+    });
     }
 
     private canMakeRecipe(recipe: Recipe, inventory: Inventory): boolean {
@@ -287,13 +298,14 @@ export class WindowPanel extends TruckPanel {
 
         const customerEmojis = ["🙂", "😎", "🤠", "🧙", "👩", "👨", "🧑"];
         const customerEmoji = Phaser.Utils.Array.GetRandom(customerEmojis);
+        const budget = Phaser.Math.Between(0, 100);
 
         this.customerText.setText(customerEmoji);
 
         const customerWillOrder = Phaser.Math.Between(1, 100) <= 75;
 
         if (!customerWillOrder) {
-            this.orderText.setText("Actually... just kidding.");
+            this.orderText.setText(`${customerEmoji}: Actually... just kidding.`);
             return;
         }
 
@@ -302,19 +314,31 @@ export class WindowPanel extends TruckPanel {
         );
 
         if (recipesForSale.length === 0) {
-            this.orderText.setText("Nothing is for sale right now.");
+            this.orderText.setText(`${customerEmoji}: Nothing is for sale right now.`);
             return;
         }
 
         const recipe = Phaser.Utils.Array.GetRandom(recipesForSale);
 
+        if (recipe.price > budget) {
+            this.orderText.setText(
+                `${customerEmoji}: I only have $${budget}.\nNever mind.`
+            );
+            return;
+        }
+
         setActiveOrder({
             customerEmoji,
+            budget,
             recipe,
             isPrepared: false,
         });
 
-        this.orderText.setText(`Order: ${recipe.name}\nPlease make this drink.`);
+        this.orderText.setText(
+            `${customerEmoji}: Can I get ${recipe.name}?\nBudget: $${budget}`
+        );
+
+        this.updateServeButton();
     }
 
     private serveOrder() {
@@ -331,7 +355,15 @@ export class WindowPanel extends TruckPanel {
         }
 
         GameState.money += order.recipe.price;
+        showFloatingText(
+            this.customerText.scene,
+            650,
+            415,
+            `+ $${order.recipe.price.toFixed(2)}`,
+            "#008000"
+        );
         this.customerText.scene.events.emit("game-state-updated");
+
         this.orderText.setText(
             `${order.customerEmoji}🥤 paid $${order.recipe.price.toFixed(2)}!`
         );
@@ -339,5 +371,18 @@ export class WindowPanel extends TruckPanel {
         this.customerText.setText("No customer yet");
 
         clearActiveOrder();
+        this.updateServeButton();
+    }
+
+    private updateServeButton() {
+        const order = getActiveOrder();
+
+        if (order?.isPrepared) {
+            this.serveButton.setColor("#000000");
+            this.serveButton.setBackgroundColor("#b6ffb6");
+        } else {
+            this.serveButton.setColor("#999999");
+            this.serveButton.setBackgroundColor("#dddddd");
+        }
     }
 }

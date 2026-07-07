@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import { ResetButton } from "../components/ResetButton";
+import { ResetButton } from "../components/buttons/ResetButton";
 
 export default class GameOverScene extends Phaser.Scene {
     constructor() {

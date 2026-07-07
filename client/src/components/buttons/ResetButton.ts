@@ -1,8 +1,8 @@
 // ResetButton.ts
 import Phaser from "phaser";
-import { resetGameState } from "../state/GameState";
-import { resetInventory } from "../services/InventoryService";
-import { resetRecipePrices } from "../services/MarketService";
+import { resetGameState } from "../../state/GameState";
+import { resetInventory } from "../../services/InventoryService";
+import { resetRecipePrices } from "../../services/MarketService";
 
 export class ResetButton extends Phaser.GameObjects.Text {
     constructor(

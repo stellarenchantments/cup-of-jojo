@@ -2,6 +2,7 @@ import type { Recipe } from "../models/Recipe";
 
 export type ActiveOrder = {
     customerEmoji: string;
+    budget: number;
     recipe: Recipe;
     isPrepared: boolean;
 };
