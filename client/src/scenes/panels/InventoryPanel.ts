@@ -17,7 +17,7 @@ export class InventoryPanel extends TruckPanel {
 
         objects.push(
             scene.add.text(450, 90, "Truck Inventory", {
-                fontSize: "40px",
+                fontSize: "30px",
                 color: "#000000",
             }).setOrigin(0.5)
         );

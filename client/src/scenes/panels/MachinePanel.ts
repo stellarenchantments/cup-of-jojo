@@ -15,7 +15,7 @@ export class MachinePanel extends TruckPanel {
             objects,
             addActiveObject,
             scene.add.text(450, 90, `${this.name}`, {
-                fontSize: "40px",
+                fontSize: "30px",
                 color: "#000000",
             }).setOrigin(0.5)
         );
