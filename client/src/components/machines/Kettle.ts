@@ -463,7 +463,8 @@ export class Kettle {
 
             this.scene.time.delayedCall(2000, () => {
                 this.hasBrewed = true;
-                this.machineText.setText("☕");
+                this.machineText.setText("");
+                this.brewingText.setText("🌟");
                 this.statusText.setText("Drink brewed.\nDrag a cup to fill it.");
             });
         } catch (error) {

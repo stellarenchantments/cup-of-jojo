@@ -1,4 +1,4 @@
-import { Location } from "../models/Location";
+import { Location } from "../assets/Location";
 import { ageInventoryOneDay } from "../services/InventoryService";
 import { clearActiveOrder } from "./OrderState";
 

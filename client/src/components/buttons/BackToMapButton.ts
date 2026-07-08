@@ -1,5 +1,6 @@
 import Phaser from "phaser";
 import { GameState } from "../../state/GameState";
+import { clearActiveOrder } from "../../state/OrderState";
 
 export function addBackToMapButton(scene: Phaser.Scene, x: number, y: number) {
   const button = scene.add.text(x, y, "⬅ Back to Map", {
@@ -17,6 +18,7 @@ export function addBackToMapButton(scene: Phaser.Scene, x: number, y: number) {
       return;
     }
 
+    clearActiveOrder();
     scene.scene.start("MapScene");
   });
 

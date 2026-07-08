@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import { Location, LocationDisplayName } from "../../models/Location";
+import { Location, LocationDisplayName } from "../../assets/Location";
 import { GameState } from "../../state/GameState";
 import { canTravel, getGasCost } from "../../state/TravelRules";
 

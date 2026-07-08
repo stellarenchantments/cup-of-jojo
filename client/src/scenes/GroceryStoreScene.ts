@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import { Location, LocationDisplayName } from "../models/Location";
+import { Location, LocationDisplayName } from "../assets/Location";
 import { addBackToMapButton } from "../components/buttons/BackToMapButton";
 import { addGameHud } from "../components/GameHud";
 import { addShelf } from "../components/Shelf";
@@ -27,7 +27,7 @@ export default class GroceryStoreScene extends Phaser.Scene {
         this.hud = addGameHud(this);
 
         this.add.text(450, 50, LocationDisplayName[Location.GROCERY], {
-            fontSize: "48px",
+            fontSize: "40px",
             color: "#000000",
         }).setOrigin(0.5);
 

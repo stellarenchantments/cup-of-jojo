@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import { Location } from "../models/Location";
+import { Location } from "../assets/Location";
 import { GameState } from "../state/GameState";
 import { addLocationButton } from "../components/buttons/LocationButton";
 import { addGameHud } from "../components/GameHud";

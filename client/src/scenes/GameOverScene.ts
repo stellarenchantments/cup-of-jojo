@@ -12,6 +12,8 @@ export default class GameOverScene extends Phaser.Scene {
             color: "#000000",
         }).setOrigin(0.5);
 
-        new ResetButton(this, 450, 400, "START OVER");
+        new ResetButton(this, 450, 400, "START OVER")
+            .setBackgroundColor("#0e270d")
+            .setColor("#FFFFFF");
     }
 }

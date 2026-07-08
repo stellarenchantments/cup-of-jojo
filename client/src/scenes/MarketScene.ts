@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import { Location, LocationDisplayName } from "../models/Location";
+import { Location, LocationDisplayName } from "../assets/Location";
 import { addBackToMapButton } from "../components/buttons/BackToMapButton"
 import { addGameHud } from "../components/GameHud";
 import { getMarketSpots } from "../services/MarketService";

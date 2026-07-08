@@ -25,7 +25,7 @@ export default class TruckScene extends Phaser.Scene {
         addGameHud(this);
 
         this.add.text(450, 50, "Market", {
-            fontSize: "30px",
+            fontSize: "40px",
             color: "#000000",
         }).setOrigin(0.5);
 

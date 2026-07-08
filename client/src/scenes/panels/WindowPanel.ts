@@ -20,7 +20,9 @@ export class WindowPanel extends TruckPanel {
     private customerText!: Phaser.GameObjects.Text;
     private orderText!: Phaser.GameObjects.Text;
     private serveButton!: Phaser.GameObjects.Text;
-    
+    private customerTimer?: Phaser.Time.TimerEvent;
+    private isWaitingAfterServe = false;
+
     render(
         scene: Phaser.Scene,
         addActiveObject: (object: Phaser.GameObjects.GameObject) => void
@@ -29,7 +31,7 @@ export class WindowPanel extends TruckPanel {
 
         objects.push(
             scene.add.text(450, 90, " Customer Window", {
-                fontSize: "40px",
+                fontSize: "30px",
                 color: "#000000",
             }).setOrigin(0.5)
         );
@@ -259,15 +261,27 @@ export class WindowPanel extends TruckPanel {
         addActiveObject(newCustomerButton);
         addActiveObject(this.serveButton);
 
-        scene.time.addEvent({
-        delay: 15000,
-        loop: true,
-        callback: () => {
-            if (!getActiveOrder()) {
-                this.spawnCustomer();
-            }
-        },
-    });
+        this.customerTimer?.remove(false);
+
+        this.customerTimer = scene.time.addEvent({
+            delay: 5000,
+            loop: true,
+            callback: () => {
+                if (
+                    !this.isWaitingAfterServe &&
+                    !getActiveOrder() &&
+                    this.customerText.active &&
+                    this.orderText.active
+                ) {
+                    this.spawnCustomer();
+                }
+            },
+        });
+
+        this.customerText.once("destroy", () => {
+            this.customerTimer?.remove(false);
+            this.customerTimer = undefined;
+        });
     }
 
     private canMakeRecipe(recipe: Recipe, inventory: Inventory): boolean {
@@ -368,10 +382,20 @@ export class WindowPanel extends TruckPanel {
             `${order.customerEmoji}🥤 paid $${order.recipe.price.toFixed(2)}!`
         );
 
-        this.customerText.setText("No customer yet");
-
         clearActiveOrder();
         this.updateServeButton();
+
+        this.isWaitingAfterServe = true;
+
+        this.customerText.setText("No customer yet");
+
+        this.customerText.scene.time.delayedCall(3000, () => {
+            this.isWaitingAfterServe = false;
+
+            if (this.customerText.active && this.orderText.active && !getActiveOrder()) {
+                this.orderText.setText("Waiting for next customer...");
+            }
+        });
     }
 
     private updateServeButton() {

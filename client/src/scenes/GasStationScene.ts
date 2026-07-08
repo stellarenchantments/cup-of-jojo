@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import { Location, LocationDisplayName } from "../models/Location";
+import { Location, LocationDisplayName } from "../assets/Location";
 import { GameState } from "../state/GameState";
 import { addBackToMapButton } from "../components/buttons/BackToMapButton";
 import { addGameHud } from "../components/GameHud";
@@ -31,7 +31,7 @@ export default class GasStationScene extends Phaser.Scene {
         this.resetMiniGame();
 
         this.add.text(450, 80, LocationDisplayName[Location.GAS], {
-            fontSize: "32px",
+            fontSize: "40px",
             color: "#000000",
         }).setOrigin(0.5);
 
@@ -46,7 +46,7 @@ export default class GasStationScene extends Phaser.Scene {
 
     startButton.on("pointerdown", () => {
         startButton.destroy();
-        this.messageText.setText("Click the right vehicle 🚚!");
+        this.messageText.setText("Click the correct moving target! 🚚");
         this.startRound();
     });
 
@@ -60,7 +60,7 @@ export default class GasStationScene extends Phaser.Scene {
             color: "#000000",
         }).setOrigin(0.5);
 
-        this.messageText = this.add.text(450, 245, "Click the correct moving target!", {
+        this.messageText = this.add.text(450, 245, "Click the correct moving target! 🚚", {
             fontSize: "24px",
             color: "#000000",
         }).setOrigin(0.5);
