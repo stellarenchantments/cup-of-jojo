@@ -1,7 +1,7 @@
 import Phaser from "phaser";
 import { Location, LocationDisplayName } from "../models/Location";
 import { GameState } from "../state/GameState";
-import { addBackToMapButton } from "../components/BackToMapButton";
+import { addBackToMapButton } from "../components/buttons/BackToMapButton";
 import { addGameHud } from "../components/GameHud";
 import { showFloatingText } from "../components/FloatingText";
 

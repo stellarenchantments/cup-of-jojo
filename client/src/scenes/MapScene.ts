@@ -1,7 +1,7 @@
 import Phaser from "phaser";
 import { Location } from "../models/Location";
 import { GameState } from "../state/GameState";
-import { addLocationButton } from "../components/LocationButton";
+import { addLocationButton } from "../components/buttons/LocationButton";
 import { addGameHud } from "../components/GameHud";
 
 export default class MapScene extends Phaser.Scene {

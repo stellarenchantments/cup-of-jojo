@@ -1,7 +1,7 @@
 import Phaser from "phaser";
-import { Location, LocationDisplayName } from "../models/Location";
-import { GameState } from "../state/GameState";
-import { canTravel, getGasCost } from "../state/TravelRules";
+import { Location, LocationDisplayName } from "../../models/Location";
+import { GameState } from "../../state/GameState";
+import { canTravel, getGasCost } from "../../state/TravelRules";
 
 export function addLocationButton(
     scene: Phaser.Scene,

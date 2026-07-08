@@ -1,6 +1,6 @@
 import Phaser from "phaser";
 import { Location, LocationDisplayName } from "../models/Location";
-import { addBackToMapButton } from "../components/BackToMapButton";
+import { addBackToMapButton } from "../components/buttons/BackToMapButton";
 import { addGameHud } from "../components/GameHud";
 import { addShelf } from "../components/Shelf";
 import { addItemCard } from "../components/ItemCard";
@@ -8,9 +8,10 @@ import { getStoreItems } from "../services/StoreService";
 import { getItemAssets } from "../assets/ItemAssets";
 import type { Ingredient } from "../models/Ingredient";
 import type { Cup } from "../models/Cup";
-import { getInventory, buyIngredient, buyCup, type Inventory } from "../services/InventoryService";
+import { getInventory, buyIngredient, buyCup,} from "../services/InventoryService";
 import { GameState } from "../state/GameState";
 import { showFloatingText } from "../components/FloatingText";
+import type { Inventory } from "../models/InventoryItems";
 
 export default class GroceryStoreScene extends Phaser.Scene {
     private hud!: ReturnType<typeof addGameHud>;
@@ -63,7 +64,7 @@ export default class GroceryStoreScene extends Phaser.Scene {
     private getIngredientQuantity(inventory: Inventory, ingredientId: string) {
         return inventory.ingredients
             .filter((item) => item.ingredient.id === ingredientId)
-            .reduce((total, item) => total + item.quantity, 0);
+            .length;
     }
 
     private getCupQuantity(inventory: Inventory, cupId: string) {

@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import { startNewDayGameState } from "../state/GameState";
+import { startNewDayGameState } from "../../state/GameState";
 
 export class SleepButton {
     private button: Phaser.GameObjects.Text;

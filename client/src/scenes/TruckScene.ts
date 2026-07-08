@@ -4,7 +4,7 @@ import { WindowPanel } from "./panels/WindowPanel"
 import { MachinePanel } from "./panels/MachinePanel";
 import { InventoryPanel } from "./panels/InventoryPanel";
 import type { TruckPanel } from "../models/TruckPanel";
-import { addBackToMapButton } from "../components/BackToMapButton";
+import { addBackToMapButton } from "../components/buttons/BackToMapButton";
 
 export default class TruckScene extends Phaser.Scene {
     private hud!: ReturnType<typeof addGameHud>;

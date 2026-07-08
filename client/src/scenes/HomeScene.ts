@@ -1,8 +1,8 @@
 import Phaser from "phaser";
 import { Location, LocationDisplayName } from "../models/Location";
-import { addBackToMapButton } from "../components/BackToMapButton";
+import { addBackToMapButton } from "../components/buttons/BackToMapButton";
 import { ResetButton } from "../components/buttons/ResetButton";
-import { SleepButton } from "../components/SleepButton";
+import { SleepButton } from "../components/buttons/SleepButton";
 
 export default class HomeScene extends Phaser.Scene {
   constructor() {

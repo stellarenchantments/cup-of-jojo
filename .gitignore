@@ -4,9 +4,11 @@ server/node_modules/
 
 # Environment variables
 server/.env
+client/.env
 
 # SQLite database
 server/dev.db
+server/prisma/dev.db
 
 # Build output
 client/dist/

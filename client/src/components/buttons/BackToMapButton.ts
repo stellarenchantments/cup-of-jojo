@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import { GameState } from "../state/GameState";
+import { GameState } from "../../state/GameState";
 
 export function addBackToMapButton(scene: Phaser.Scene, x: number, y: number) {
   const button = scene.add.text(x, y, "⬅ Back to Map", {

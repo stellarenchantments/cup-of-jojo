@@ -1,7 +1,8 @@
 import type { Inventory} from "../models/InventoryItems";
+import { API_URL } from "../config";
 
 export async function getInventory(): Promise<Inventory> {
-    const response = await fetch("http://localhost:3000/api/inventory");
+    const response = await fetch(`${API_URL}/api/inventory`);
 
     if (!response.ok) {
         throw new Error("Failed to load inventory.");
@@ -15,7 +16,7 @@ export async function buyIngredient(
     quantity = 1
 ) {
     const response = await fetch(
-        "http://localhost:3000/api/inventory/ingredients",
+        `${API_URL}/api/inventory/ingredients`,
         {
             method: "POST",
             headers: {
@@ -40,7 +41,7 @@ export async function buyCup(
     quantity = 1
 ) {
     const response = await fetch(
-        "http://localhost:3000/api/inventory/cups",
+        `${API_URL}/api/inventory/cups`,
         {
             method: "POST",
             headers: {
@@ -62,7 +63,7 @@ export async function buyCup(
 
 export async function resetInventory() {
     const response = await fetch(
-        "http://localhost:3000/api/inventory",
+        `${API_URL}/api/inventory`,
         {
             method: "DELETE",
         }
@@ -80,7 +81,7 @@ export async function consumeIngredient(
     amountOz = 1
 ) {
     const response = await fetch(
-        `http://localhost:3000/api/inventory/ingredients/${inventoryIngredientId}/consume`,
+        `${API_URL}/api/inventory/ingredients/${inventoryIngredientId}/consume`,
         {
             method: "PATCH",
             headers: {
@@ -101,7 +102,7 @@ export async function consumeCup(
     inventoryCupId: string
 ) {
     const response = await fetch(
-        `http://localhost:3000/api/inventory/cups/${inventoryCupId}/consume`,
+        `${API_URL}/api/inventory/cups/${inventoryCupId}/consume`,
         {
             method: "PATCH",
         }
@@ -115,7 +116,7 @@ export async function consumeCup(
 }
 
 export async function ageInventoryOneDay() {
-    const response = await fetch("http://localhost:3000/api/inventory/age", {
+    const response = await fetch(`${API_URL}/api/inventory/age`, {
         method: "PATCH",
     });
 

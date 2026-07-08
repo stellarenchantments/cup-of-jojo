@@ -1,6 +1,5 @@
 export const ItemAssets: Record<string, string> = {
     "Coffee Beans": "🫘",
-    "Coffee Grounds": "🟤", 
     "Water": "💧",
     "Cacao Powder": "🍫",
     "Whole Milk": "🥛",

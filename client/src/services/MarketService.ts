@@ -1,8 +1,9 @@
 import type { MarketSpot } from "../models/MarketSpot";
 import type { Recipe } from "../models/Recipe";
+import { API_URL } from "../config";
 
 export async function getMarketSpots(): Promise<MarketSpot[]> {
-  const response = await fetch("http://localhost:3000/api/market-spots");
+  const response = await fetch(`${API_URL}/api/market-spots`);
 
   if (!response.ok) {
     throw new Error("Failed to load market spots.");
@@ -12,7 +13,7 @@ export async function getMarketSpots(): Promise<MarketSpot[]> {
 }
 
 export async function getRecipes(): Promise<Recipe[]> {
-    const response = await fetch("http://localhost:3000/api/recipes");
+    const response = await fetch(`${API_URL}/api/recipes`);
 
     if (!response.ok) {
         throw new Error("Failed to load recipes.");
@@ -26,7 +27,7 @@ export async function updateRecipePrice(
     price: number
 ): Promise<Recipe> {
     const response = await fetch(
-        `http://localhost:3000/api/recipes/${recipeId}/price`,
+        `${API_URL}/api/recipes/${recipeId}/price`,
         {
             method: "PATCH",
             headers: {
@@ -44,7 +45,7 @@ export async function updateRecipePrice(
 }
 
 export async function resetRecipePrices() {
-    const response = await fetch("http://localhost:3000/api/recipes/reset-prices", {
+    const response = await fetch(`${API_URL}/api/recipes/reset-prices`, {
         method: "PATCH",
     });
 
@@ -59,7 +60,7 @@ export async function sellRecipe(
     recipeId: string,
     budget: number
 ) {
-    const response = await fetch("http://localhost:3000/api/orders/sell", {
+    const response = await fetch(`${API_URL}/api/orders/sell`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
