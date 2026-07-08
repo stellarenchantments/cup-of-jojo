@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 import { GameState } from "../../state/GameState";
 import { clearActiveOrder } from "../../state/OrderState";
+import { Location } from "../../assets/Location";
 
 export function addBackToMapButton(scene: Phaser.Scene, x: number, y: number) {
   const button = scene.add.text(x, y, "⬅ Back to Map", {
@@ -13,7 +14,7 @@ export function addBackToMapButton(scene: Phaser.Scene, x: number, y: number) {
     .setInteractive({ useHandCursor: true });
 
   button.on("pointerdown", () => {
-    if (GameState.gallonsOfGas <= 0) {
+    if (GameState.gallonsOfGas <= 0 && (GameState.truckLocation != Location.GAS || GameState.money < 10)) {
       scene.scene.start("GameOverScene");
       return;
     }

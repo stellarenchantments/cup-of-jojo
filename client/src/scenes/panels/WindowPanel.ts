@@ -22,6 +22,7 @@ export class WindowPanel extends TruckPanel {
     private serveButton!: Phaser.GameObjects.Text;
     private customerTimer?: Phaser.Time.TimerEvent;
     private isWaitingAfterServe = false;
+    private newCustomerButton!: Phaser.GameObjects.Text;
 
     render(
         scene: Phaser.Scene,
@@ -228,7 +229,7 @@ export class WindowPanel extends TruckPanel {
             }
         ).setOrigin(0.5);
 
-        const newCustomerButton = scene.add.text(650, 350, "New Customer", {
+        this.newCustomerButton = scene.add.text(650, 350, "New Customer", {
             fontSize: "22px",
             color: "#000000",
             backgroundColor: "#eeeeee",
@@ -246,11 +247,12 @@ export class WindowPanel extends TruckPanel {
             .setOrigin(0.5)
             .setInteractive({ useHandCursor: true });
 
-        newCustomerButton.on("pointerdown", () => {
+        this.newCustomerButton.on("pointerdown", () => {
             this.spawnCustomer();
         });
 
         this.updateServeButton();
+        this.updateNewCustomerButton();
 
         this.serveButton.on("pointerdown", () => {
             this.serveOrder();
@@ -258,7 +260,7 @@ export class WindowPanel extends TruckPanel {
 
         addActiveObject(this.customerText);
         addActiveObject(this.orderText);
-        addActiveObject(newCustomerButton);
+        addActiveObject(this.newCustomerButton);
         addActiveObject(this.serveButton);
 
         this.customerTimer?.remove(false);
@@ -353,6 +355,7 @@ export class WindowPanel extends TruckPanel {
         );
 
         this.updateServeButton();
+        this.updateNewCustomerButton();
     }
 
     private serveOrder() {
@@ -384,6 +387,7 @@ export class WindowPanel extends TruckPanel {
 
         clearActiveOrder();
         this.updateServeButton();
+        this.updateNewCustomerButton();
 
         this.isWaitingAfterServe = true;
 
@@ -409,4 +413,18 @@ export class WindowPanel extends TruckPanel {
             this.serveButton.setBackgroundColor("#dddddd");
         }
     }
+
+    private updateNewCustomerButton() {
+    const hasActiveOrder = !!getActiveOrder();
+
+    if (hasActiveOrder) {
+        this.newCustomerButton.disableInteractive();
+        this.newCustomerButton.setColor("#999999");
+        this.newCustomerButton.setBackgroundColor("#dddddd");
+    } else {
+        this.newCustomerButton.setInteractive({ useHandCursor: true });
+        this.newCustomerButton.setColor("#000000");
+        this.newCustomerButton.setBackgroundColor("#eeeeee");
+    }
+}
 }

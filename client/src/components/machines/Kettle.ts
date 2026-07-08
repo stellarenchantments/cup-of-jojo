@@ -32,6 +32,9 @@ export class Kettle {
     private ingredientAmountsAdded = new Map<string, number>();
     private hasBrewed = false;
 
+    private brewTimer?: Phaser.Time.TimerEvent;
+    private isDestroyed = false;
+
     constructor(
         scene: Phaser.Scene,
         x: number,
@@ -280,6 +283,11 @@ export class Kettle {
         this.scene.input.on("dragend", dragEndHandler);
 
         this.machine.on("destroy", () => {
+            this.isDestroyed = true;
+
+            this.brewTimer?.remove(false);
+            this.brewTimer = undefined;
+
             this.scene.input.off("drag", dragHandler);
             this.scene.input.off("dragend", dragEndHandler);
         });
@@ -461,7 +469,16 @@ export class Kettle {
                 );
             }
 
-            this.scene.time.delayedCall(2000, () => {
+            this.brewTimer = this.scene.time.delayedCall(2000, () => {
+                if (
+                    this.isDestroyed ||
+                    !this.machineText.active ||
+                    !this.brewingText.active ||
+                    !this.statusText.active
+                ) {
+                    return;
+                }
+
                 this.hasBrewed = true;
                 this.machineText.setText("");
                 this.brewingText.setText("🌟");
