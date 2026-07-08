@@ -7,6 +7,9 @@ import GroceryStoreScene from "./scenes/GroceryStoreScene";
 import HomeScene from "./scenes/HomeScene";
 import MarketScene from "./scenes/MarketScene";
 import GameOverScene from "./scenes/GameOverScene";
+import { resetInventory } from "./services/InventoryService";
+import { resetGameState } from "./state/GameState";
+import { clearActiveOrder } from "./state/OrderState";
 
 const config: Phaser.Types.Core.GameConfig = {
     type: Phaser.AUTO,
@@ -32,4 +35,12 @@ const config: Phaser.Types.Core.GameConfig = {
     ],
 };
 
-new Phaser.Game(config);
+async function startGame() {
+    await resetInventory();
+    resetGameState();
+    clearActiveOrder();
+
+    new Phaser.Game(config);
+}
+
+startGame();
