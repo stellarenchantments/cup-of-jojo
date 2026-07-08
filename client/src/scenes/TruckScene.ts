@@ -7,7 +7,6 @@ import type { TruckPanel } from "../models/TruckPanel";
 import { addBackToMapButton } from "../components/buttons/BackToMapButton";
 
 export default class TruckScene extends Phaser.Scene {
-    private hud!: ReturnType<typeof addGameHud>;
     private panels: TruckPanel[] = [
         new MachinePanel(),
         new WindowPanel(),
@@ -23,7 +22,7 @@ export default class TruckScene extends Phaser.Scene {
 
     create() {
         this.cameras.main.setBackgroundColor("#ffffff");
-        this.hud = addGameHud(this);
+        addGameHud(this);
 
         this.add.text(450, 50, "Market", {
             fontSize: "30px",
