@@ -4,6 +4,14 @@ const prisma = new PrismaClient();
 
 async function main() {
 
+    await prisma.recipeIngredient.deleteMany();
+    await prisma.recipe.deleteMany();
+    await prisma.inventoryIngredient.deleteMany();
+    await prisma.inventoryCup.deleteMany();
+    await prisma.marketSpot.deleteMany();
+    await prisma.cup.deleteMany();
+    await prisma.ingredient.deleteMany();
+    
     await prisma.ingredient.createMany({
         data: [
             { name: "Coffee Beans", sizeOz: 16, groceryCost: 16, perishableDays: null },
@@ -16,12 +24,14 @@ async function main() {
         ],
     });
 
-    await prisma.cup.create({
-        data: {
+    await prisma.cup.upsert({
+        where: { name: "Regular Cup" },
+        update: {},
+        create: {
             name: "Regular Cup",
             sizeOz: 8,
             groceryCost: 0.50,
-        }
+        },
     });
 
     const ingredients = {
@@ -39,11 +49,14 @@ async function main() {
         dayUnlocked: number,
         recipeIngredients: { ingredientId: string; amountOz: number }[]
     ) {
-        const recipe = await prisma.recipe.create({
-            data: {
-                name,
-                dayUnlocked,
-            },
+        const recipe = await prisma.recipe.upsert({
+            where: { name },
+            update: { dayUnlocked },
+            create: { name, dayUnlocked },
+        });
+
+        await prisma.recipeIngredient.deleteMany({
+            where: { recipeId: recipe.id },
         });
 
         await prisma.recipeIngredient.createMany({
